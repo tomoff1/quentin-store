@@ -1,10 +1,12 @@
 # Publication publique à 0 €
 
-Préparée pour `tomoff1/quentin-store`. Aucun compte n'est créé par le projet. Aucune publication distante n'a été effectuée au moment de la livraison locale.
+Le dépôt public [tomoff1/quentin-store](https://github.com/tomoff1/quentin-store) et la [release expérimentale v0.1.0](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.0) sont publiés. Aucun compte n'est créé par le projet.
+
+Le [site Cloudflare Pages](https://quentin-store.pages.dev/) est également publié et vérifié dans le navigateur. Le premier déploiement a été effectué par upload direct, sans connexion automatique de GitHub à Cloudflare. Utiliser `scripts/publish-cloudflare.ps1` pour mettre à jour le site, ou connecter le dépôt dans le tableau de bord pour les déploiements automatiques.
 
 ## GitHub
 
-1. Installer GitHub CLI depuis sa source officielle et se connecter avec `gh auth login`. Faire la connexion dans le navigateur ; ne pas communiquer de mot de passe ou token dans le chat.
+1. Installer GitHub CLI depuis sa source officielle et se connecter avec `gh auth login --scopes workflow`. Faire la connexion dans le navigateur ; ne pas communiquer de mot de passe ou token dans le chat.
 2. Depuis le projet compilé, exécuter `./scripts/publish-github.ps1`.
 3. Le script génère le catalogue et le manifeste avec les tailles et hashes des vrais ELF, crée le dépôt public si absent, pousse `main` et crée la prerelease `v0.1.0`.
 4. En cas de dépôt existant différent ou de branche distante non compatible, le push est refusé ; le script ne force pas la réécriture de l'historique. En cas de tag déjà publié, il refuse la nouvelle release ; examiner la version avant de relancer.

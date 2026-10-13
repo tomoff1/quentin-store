@@ -18,11 +18,12 @@ Réalisée sur Windows 11 le 13 octobre 2026.
 | Compilation croisée C++ pour PS5 | Deux ELF produits par clang/lld 18.1.8, SDK public v0.44 |
 | Inspection ELF | ELF64 little endian x86-64 PIE, segments alignés sur 0x4000, dépendances système SCE |
 | Interface réelle sur PC | Exécution SDL, capture incluse dans site/screenshot.png |
-| Scripts Python | Compilation syntaxique réussie |
+| Scripts Python | Compilation syntaxique réussie ; relink des objets fourni testé, ELF identique |
 | Scripts PowerShell | Analyse syntaxique réussie |
 | PS5 physique firmware 13.60 | **Non testée** |
-| GitHub Actions | En attente du premier run public |
-| Cloudflare Pages | En attente de connexion du compte |
+| GitHub Actions | Tests et compilation PS5 réussis sur Ubuntu 24.04 ; [run vérifié](https://github.com/tomoff1/quentin-store/actions/runs/38352197453) |
+| Catalogue public et GitHub Releases | Chargement HTTPS et téléchargement de Quentin Blocks vérifiés avec le moteur C++ réel, SHA-256 correct |
+| Cloudflare Pages | [Site public déployé](https://quentin-store.pages.dev/), ouverture vérifiée dans le navigateur, bouton Télécharger actif |
 
 Les captures sont celles du programme exécuté sur PC, pas des images générées ni une preuve d'exécution sur console. La suite réseau utilise `src/network.cpp`, également lié dans le payload PS5 ; elle ne prouve pas la compatibilité de la pile PS5 avec ces bibliothèques.
 

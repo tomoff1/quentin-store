@@ -55,7 +55,7 @@ sudo apt-get install -y clang-18 lld-18 python3 g++ cmake
 bash scripts/build-linux.sh
 ```
 
-WSL n'était pas accessible dans l'environnement de création (`Wsl/E_ACCESSDENIED`) ; la compilation a réellement été faite sur Windows par LLVM. Le workflow GitHub Actions pour Ubuntu est préparé mais n'a pas encore été exécuté sur GitHub.
+WSL n'était pas accessible dans l'environnement de création (`Wsl/E_ACCESSDENIED`) ; la compilation a réellement été faite sur Windows par LLVM. GitHub Actions a également exécuté les tests et la compilation PS5 avec succès sur Ubuntu 24.04.
 
 ## Tests
 
@@ -82,11 +82,13 @@ Le code, les ELF et le site sont prêts pour le compte `tomoff1`. Les actions di
 
 ```powershell
 winget install GitHub.cli
-gh auth login
+gh auth login --scopes workflow
 ./scripts/publish-github.ps1
 ```
 
 Cloudflare Pages : dépôt GitHub `tomoff1/quentin-store`, preset « None », commande de build vide, dossier de sortie `site`. GitHub sert les ELF via Releases, Cloudflare sert la présentation. Le catalogue et les mises à jour sont des fichiers JSON publics statiques, donc aucun VPS nécessaire.
+
+Livraison publique : [site](https://quentin-store.pages.dev/), [code source](https://github.com/tomoff1/quentin-store), [version téléchargeable](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.0). Cloudflare a été déployé par upload direct ; la connexion automatique au dépôt reste optionnelle. Pour redéployer : `./scripts/publish-cloudflare.ps1`.
 
 ## Architecture et licences
 
