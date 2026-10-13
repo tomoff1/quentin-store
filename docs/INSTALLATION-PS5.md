@@ -2,23 +2,11 @@
 
 Cette procédure vise un environnement déjà jailbreaké. QUENTIN STORE n'exploite pas la console. Le firmware 13.60 est une cible non validée pour ces ELF. Ne modifier ni firmware ni protections réseau pour tenter de résoudre un problème du store.
 
-## Vérifier les fichiers
+## Un seul fichier a envoyer
 
-Décompresser l'archive sur PC. Comparer le résultat de `Get-FileHash -Algorithm SHA256 ./quentin-store.elf` à `SHA256SUMS` téléchargé avec la release. Le fichier doit être un ELF x86-64, pas un PKG renommé.
+Telecharger uniquement `quentin-store.elf` depuis la release v0.1.1. La police, les certificats HTTPS et un catalogue initial sont integres. Aucun transfert FTP de fichiers annexes n'est necessaire.
 
-## Préparer les données par FTP
-
-Sur le serveur FTP existant de la PS5, créer `/data/quentin-store/` puis copier :
-
-| Fichier | Chemin PS5 |
-|---|---|
-| ca-bundle.crt | /data/quentin-store/ca-bundle.crt |
-| font.ttf | /data/quentin-store/font.ttf |
-| config.json | /data/quentin-store/config.json |
-| catalog.json | /data/quentin-store/catalog.json |
-| quentin-store.elf, si lancement par chemin | /data/quentin-store/quentin-store.elf |
-
-Ne pas copier les ports SDK sur la console : SDL, curl et OpenSSL sont liés statiquement. Les modules système restent ceux de la console. Le dossier `downloads` est créé automatiquement. Le code refuse les liens symboliques pour les fichiers gérés sur la cible POSIX.
+Au premier lancement, le store cree automatiquement `/data/quentin-store/`, sa configuration, ses certificats et son catalogue. Les parametres et l'historique existants sont conserves. Internet permet d'actualiser le catalogue. Le SHA-256 est disponible dans `SHA256SUMS` sur la release.
 
 ## Lancer l'ELF
 

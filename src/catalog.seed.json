@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "items": [
+    {
+      "id": "quentin-blocks",
+      "title": "Quentin Blocks",
+      "category": "Jeux",
+      "description": "Jeu original de casse-briques. Stick gauche pour bouger, X pour jouer. Aucun jeu commercial ni ROM.",
+      "version": "0.1.0",
+      "url": "https://github.com/tomoff1/quentin-store/releases/download/v0.1.0/quentin-blocks.elf",
+      "sha256": "a599552bb69eb56f94a083bc840bbc16e45512542387453462851ae5bc3b9090",
+      "size": 3491552,
+      "license": "GPL-3.0-or-later",
+      "source": "https://github.com/tomoff1/quentin-store",
+      "redistribution": true,
+      "format": "elf"
+    }
+  ]
+}

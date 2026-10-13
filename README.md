@@ -1,22 +1,18 @@
 # QUENTIN STORE
 
-Application homebrew PS5 native en C++ : catalogue libre, téléchargement HTTPS, reprise et SHA-256. Version **0.1.0 expérimentale**. Deux vrais exécutables ELF sont compilés : `quentin-store.elf` et `quentin-blocks.elf`.
+Application homebrew PS5 native en C++ : catalogue libre, téléchargement HTTPS, reprise et SHA-256. Version **0.1.1 expérimentale**. Deux vrais exécutables ELF sont compilés : `quentin-store.elf` et `quentin-blocks.elf`.
 
 **Statut honnête : compilation PS5 réussie sur Windows ; exécution PS5 13.60 non testée.** La publication distante et le run GitHub Actions sont suivis dans `docs/VALIDATION.md`. Le site désactive son bouton de téléchargement tant que la release publique n'existe pas.
 
 ## Démarrage sur PS5
 
-1. Extraire `dist/QUENTIN-STORE-0.1.0.zip`.
-2. Via FTP, créer `/data/quentin-store/` et y copier `ca-bundle.crt`, `font.ttf`, `config.json`, `catalog.json`.
-3. Avec le jailbreak déjà actif et votre ELF Loader compatible sur 9021, envoyer l'ELF :
+1. Telecharger uniquement [quentin-store.elf](https://github.com/tomoff1/quentin-store/releases/download/v0.1.1/quentin-store.elf).
+2. Envoyer ce fichier avec votre ELF Loader compatible, apres activation du jailbreak.
+3. Le store initialise automatiquement ses donnees dans `/data/quentin-store/` : police et ressources sont integrees, aucun fichier annexe a copier par FTP.
 
-```powershell
-./scripts/send-elf.ps1 -ConsoleIP 192.168.1.50
-```
+Le script optionnel `scripts/send-elf.ps1 -ConsoleIP ADRESSE_IP_PS5 -ElfPath CHEMIN_ELF` utilise le port 9021. Le loader doit etre actif. Voir [le guide PS5](docs/INSTALLATION-PS5.md).
 
-L'adresse ci-dessus est un exemple à remplacer. Alternative FTP : copier `quentin-store.elf` dans `/data/quentin-store/` puis demander au chargeur de lancer `file:/data/quentin-store/quentin-store.elf` si votre version prend en charge cette commande. Voir [le guide PS5](docs/INSTALLATION-PS5.md).
-
-Les URL par défaut ciblent `tomoff1/quentin-store`. Avant publication de ce dépôt et de la release, elles ne répondront pas. Le catalogue embarqué reste consultable ; Quentin Blocks est également fourni dans l'archive et se lance directement avec ELF Loader.
+Le catalogue initial contient Quentin Blocks. Les URL par defaut ciblent le catalogue public de `tomoff1/quentin-store` et permettent sa mise a jour.
 
 ## Fonctions présentes
 
@@ -88,7 +84,7 @@ gh auth login --scopes workflow
 
 Cloudflare Pages : dépôt GitHub `tomoff1/quentin-store`, preset « None », commande de build vide, dossier de sortie `site`. GitHub sert les ELF via Releases, Cloudflare sert la présentation. Le catalogue et les mises à jour sont des fichiers JSON publics statiques, donc aucun VPS nécessaire.
 
-Livraison publique : [site](https://quentin-store.pages.dev/), [code source](https://github.com/tomoff1/quentin-store), [version téléchargeable](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.0). Cloudflare a été déployé par upload direct ; la connexion automatique au dépôt reste optionnelle. Pour redéployer : `./scripts/publish-cloudflare.ps1`.
+Livraison publique : [site](https://quentin-store.pages.dev/), [code source](https://github.com/tomoff1/quentin-store), [version téléchargeable](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.1). Cloudflare a été déployé par upload direct ; la connexion automatique au dépôt reste optionnelle. Pour redéployer : `./scripts/publish-cloudflare.ps1`.
 
 ## Architecture et licences
 

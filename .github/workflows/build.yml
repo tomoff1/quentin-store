@@ -12,6 +12,7 @@ jobs:
       - uses: actions/checkout@v4
       - run: sudo apt-get update && sudo apt-get install -y clang-18 lld-18 libsdl2-dev libsdl2-gfx-dev libsdl2-ttf-dev libcurl4-openssl-dev libssl-dev
       - run: cmake -S . -B build/host -DQS_DESKTOP=ON && cmake --build build/host -j2 && ctest --test-dir build/host --output-on-failure
+      - run: python3 tests/standalone_fixture.py --binary build/host/quentin-store
       - run: python3 tests/https_fixture.py --binary build/host/network-tests
       - run: python3 scripts/bootstrap.py && python3 scripts/build_ps5.py
       - run: python3 scripts/package.py --repository "$GITHUB_REPOSITORY"

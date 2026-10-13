@@ -1,6 +1,6 @@
 import argparse, hashlib, json, pathlib, shutil, zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-VERSION='0.1.0'
+VERSION='0.1.1'
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repository',help='proprietaire/quentin-store');a=p.parse_args()
     build=ROOT/'build/ps5';out=ROOT/'dist';out.mkdir(exist_ok=True)
@@ -19,9 +19,9 @@ def main():
     (out/'catalog.json').write_text(json.dumps(catalog,indent=2,ensure_ascii=False),encoding='utf-8')
     (out/'config.json').write_text(json.dumps({'catalog_url':('https://raw.githubusercontent.com/'+a.repository+'/main/site/catalog.json') if a.repository else '', 'update_url':('https://raw.githubusercontent.com/'+a.repository+'/main/site/update.json') if a.repository else ''},indent=2))
     if items:
-        (out/'update.json').write_text(json.dumps({'schema':1,'version':VERSION,'notes':'Premiere version experimentale. Execution PS5 a confirmer. Installation manuelle par ELF Loader.','asset':items[1]},indent=2))
+        (out/'update.json').write_text(json.dumps({'schema':1,'version':VERSION,'notes':'ELF autonome : police, certificats et catalogue integres. Execution PS5 a confirmer. Installation manuelle par ELF Loader.','asset':items[1]},indent=2))
         for name in ['catalog.json','update.json']:shutil.copy2(out/name,ROOT/'site'/name)
-        (ROOT/'site/release.json').write_text(json.dumps({'version':VERSION,'download':base+'QUENTIN-STORE-'+VERSION+'.zip','source':source},indent=2))
+        (ROOT/'site/release.json').write_text(json.dumps({'version':VERSION,'download':base+'quentin-store.elf','source':source},indent=2))
     else:
         print('Depot non configure: catalogue vide, aucune URL de telechargement inventee.')
     for f in ['ca-bundle.crt','font.ttf','LICENSE','README.md']:shutil.copy2(ROOT/f,out/f)

@@ -1,5 +1,6 @@
 """Compilation croisee C++ puis ELF PIE avec le script du SDK public."""
 import argparse, os, pathlib, shutil, subprocess
+from embed_assets import generate
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 def run(args):
     print(' '.join(str(x) for x in args),flush=True)
@@ -14,7 +15,8 @@ def main():
     linker=llvm/('ld.lld.exe' if os.name=='nt' else 'ld.lld') if llvm else shutil.which('ld.lld-18') or shutil.which('ld.lld')
     if not clang or not linker: raise RuntimeError('Installer clang-18 et lld-18, ou lancer bootstrap.py sur Windows')
     build=ROOT/'build/ps5';build.mkdir(parents=True,exist_ok=True)
-    flags=['-target','x86_64-sie-ps5','-std=c++17','-O2','-g','-D__PROSPERO__','-fno-stack-protector','-fno-plt','-femulated-tls','-fvisibility-nodllstorageclass=default','-nostdinc++','-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-isystem',hb/'include','-isystem',hb/'include/SDL2','-I',ROOT/'third_party','-I',ROOT/'src']
+    generate(build/'embedded_assets.hpp')
+    flags=['-target','x86_64-sie-ps5','-std=c++17','-O2','-g','-D__PROSPERO__','-fno-stack-protector','-fno-plt','-femulated-tls','-fvisibility-nodllstorageclass=default','-nostdinc++','-isystem',sdk/'target/include/c++/v1','-isystem',sdk/'target/include','-isystem',hb/'include','-isystem',hb/'include/SDL2','-I',ROOT/'third_party','-I',ROOT/'src','-I',build]
     if llvm and os.name=='nt': flags += ['-resource-dir',llvm.parent/'lib/clang/18']
     flags += ['-fexceptions','-frtti']
     common=['SDL2_gfx','SDL2_ttf','freetype','png16','bz2','SDL2','iconv','samplerate','SceSystemService','SceUserService','ScePad','SceAudioOut','SceVideoOut','SceKeyboard','SceImeDialog']

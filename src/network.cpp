@@ -93,7 +93,7 @@ static void common(CURL* c,const std::string& url,const std::string& ca,Progress
     curl_easy_setopt(c,CURLOPT_PROTOCOLS_STR,"https"); curl_easy_setopt(c,CURLOPT_REDIR_PROTOCOLS_STR,"https");
     curl_easy_setopt(c,CURLOPT_FOLLOWLOCATION,1L); curl_easy_setopt(c,CURLOPT_MAXREDIRS,5L);
     curl_easy_setopt(c,CURLOPT_CONNECTTIMEOUT,15L); curl_easy_setopt(c,CURLOPT_LOW_SPEED_LIMIT,128L); curl_easy_setopt(c,CURLOPT_LOW_SPEED_TIME,30L);
-    curl_easy_setopt(c,CURLOPT_NOSIGNAL,1L); curl_easy_setopt(c,CURLOPT_USERAGENT,"QUENTIN-STORE/0.1.0");
+    curl_easy_setopt(c,CURLOPT_NOSIGNAL,1L); curl_easy_setopt(c,CURLOPT_USERAGENT,"QUENTIN-STORE/0.1.1");
     curl_easy_setopt(c,CURLOPT_NOPROGRESS,0L); curl_easy_setopt(c,CURLOPT_XFERINFOFUNCTION,progress); curl_easy_setopt(c,CURLOPT_XFERINFODATA,&p);
 }
 struct Memory { std::string data; };

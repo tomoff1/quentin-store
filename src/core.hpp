@@ -9,7 +9,7 @@
 #include <vector>
 namespace qs {
 using Json = nlohmann::json;
-constexpr const char* Version = "0.1.0";
+constexpr const char* Version = "0.1.1";
 constexpr uint64_t MaxAsset = 2ULL * 1024 * 1024 * 1024;
 struct Item {
     std::string id, title, version, category, description, url, sha256, license, source;

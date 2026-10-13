@@ -4,6 +4,7 @@
 #include <SDL_ttf.h>
 #include "drawing.hpp"
 #include "network.hpp"
+#include "embedded_assets.hpp"
 #include <curl/curl.h>
 #include <thread>
 #include <cmath>
@@ -52,12 +53,14 @@ int main(int argc,char** argv) {
 #endif
     if(argc>1)root=argv[1];
     Progress progress; std::thread worker; std::mutex resultMutex; std::string pendingCatalog,pendingUpdate;
-    std::string catalogUrl,updateUrl,ca=root+"/ca-bundle.crt",last="Catalogue local",query,category="Tous";
+    std::string catalogUrl="https://raw.githubusercontent.com/tomoff1/quentin-store/main/site/catalog.json",updateUrl="https://raw.githubusercontent.com/tomoff1/quentin-store/main/site/update.json",ca=root+"/ca-bundle.crt",last="Catalogue local",query,category="Tous";
     std::vector<Item> items; Json history=Json::array();
     try {
         directory(root); directory(root+"/downloads");
-        try { auto config=Json::parse(read_text(root+"/config.json")); catalogUrl=config.value("catalog_url",""); updateUrl=config.value("update_url",""); }catch(...){}
-        try { items=parse_catalog(read_text(root+"/catalog.json")); }catch(...){}
+        write_text(ca,std::string(reinterpret_cast<const char*>(embedded::ca),sizeof embedded::ca));
+        items=parse_catalog(std::string(reinterpret_cast<const char*>(embedded::catalog),sizeof embedded::catalog));
+        try { auto config=Json::parse(read_text(root+"/config.json")); catalogUrl=config.value("catalog_url",""); updateUrl=config.value("update_url",""); }catch(...){write_text(root+"/config.json",Json{{"catalog_url",catalogUrl},{"update_url",updateUrl}}.dump(2));}
+        try { items=parse_catalog(read_text(root+"/catalog.json")); }catch(...){write_text(root+"/catalog.json",std::string(reinterpret_cast<const char*>(embedded::catalog),sizeof embedded::catalog));}
         try { history=Json::parse(read_text(root+"/downloads/history.json")); if(!history.is_array())history=Json::array(); }catch(...){}
     }catch(const std::exception& e) { std::fprintf(stderr,"%s\n",e.what()); return 1; }
     if(curl_global_init(CURL_GLOBAL_DEFAULT)!=CURLE_OK)return 2;
@@ -66,7 +69,7 @@ int main(int argc,char** argv) {
     if(window)renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
     if(!renderer){write_text(root+"/diagnostic.log",SDL_GetError()); SDL_Quit(); curl_global_cleanup(); return 4;}
     SDL_RenderSetLogicalSize(renderer,1280,720);
-    if(TTF_Init()==0){int sizes[]={13,20,32};for(int i=0;i<3;i++){fonts[i]=TTF_OpenFont((root+"/font.ttf").c_str(),sizes[i]);if(fonts[i])TTF_SetFontStyle(fonts[i],TTF_STYLE_BOLD);}}
+    if(TTF_Init()==0){int sizes[]={13,20,32};for(int i=0;i<3;i++){fonts[i]=TTF_OpenFontRW(SDL_RWFromConstMem(embedded::font,int(sizeof embedded::font)),1,sizes[i]);if(fonts[i])TTF_SetFontStyle(fonts[i],TTF_STYLE_BOLD);}}
     std::map<int,SDL_Joystick*> pads;
     auto openPad=[&](int index){auto* p=SDL_JoystickOpen(index); if(p)pads[SDL_JoystickInstanceID(p)]=p;};
     for(int i=0;i<SDL_NumJoysticks();i++)openPad(i);
@@ -137,7 +140,7 @@ int main(int argc,char** argv) {
         rect(0,0,245,720,0x111a2bff); text(26,45,"QUENTIN",0xffffffff,3);text(26,78,"STORE",0x75ebd5ff,3);text(26,120,"HOME OF HOMEBREW",0x91a0baff,1);
         focusY+=(160+tab*65-focusY)*std::min(1.f,dt*14);roundedBoxColor(renderer,16,int(focusY)-12,229,int(focusY)+35,8,0x244a58ff);
         for(int i=0;i<5;i++)text(28,160+i*65,tabs[i],i==tab?0x94ffe4ff:0xa5b4ceff,2);
-        text(28,615,"v0.1.0 | ELF",0x8797b4ff,1);text(28,640,"13.60: test requis",0xffc783ff,1);
+        text(28,615,std::string("v")+Version+" | ELF",0x8797b4ff,1);text(28,640,"13.60: test requis",0xffc783ff,1);
         text(280,36,tabs[tab],0xffffffff,3);text(280,78,"Libre. Gratuit. Verifie.",0x94a8c5ff,2);
         if(tab<3){text(280,117,"Categorie: "+category+"  |  Recherche: "+query.substr(0,25),0x75ebd5ff,1);
             if(visible.empty()){artwork(280,160,900,210,0);text(310,390,"Catalogue vide",0xffffffff,3);wrap(310,440,"Configurer le catalogue HTTPS dans Parametres, puis actualiser avec Triangle. Le catalogue local est aussi accepte.",52);}

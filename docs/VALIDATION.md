@@ -29,3 +29,7 @@ Réalisée sur Windows 11 le 13 octobre 2026.
 Les captures sont celles du programme exécuté sur PC, pas des images générées ni une preuve d'exécution sur console. La suite réseau utilise `src/network.cpp`, également lié dans le payload PS5 ; elle ne prouve pas la compatibilité de la pile PS5 avec ces bibliothèques.
 
 Les tests sur console qui restent indispensables sont détaillés dans INSTALLATION-PS5.md. Le protocole ELF Loader, la disponibilité des modules système, les permissions de vidéo, le système de fichiers et TLS doivent être validés sur la machine réelle.
+
+## Version 0.1.1 autonome
+
+ELF PS5 recompile avec police, CA et catalogue integres. Test du client SDL reel dans un dossier vierge sans fichier annexe : creation automatique, rendu avec police en memoire, CA identique et catalogue charge. Second lancement : configuration existante et historique conserves. Le test utilise SDL dummy sur PC et ne confirme pas une execution PS5. Suite core : 36 assertions reussies. Transfert TCP local du nouvel ELF : octets identiques.
