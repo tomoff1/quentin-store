@@ -1,0 +1,33 @@
+{
+  "schema": 1,
+  "items": [
+    {
+      "id": "quentin-blocks",
+      "title": "Quentin Blocks",
+      "category": "Jeux",
+      "description": "Jeu original de casse-briques. Stick gauche pour bouger, X pour jouer. Aucun jeu commercial ni ROM.",
+      "version": "0.1.0",
+      "url": "https://github.com/tomoff1/quentin-store/releases/download/v0.1.0/quentin-blocks.elf",
+      "sha256": "a599552bb69eb56f94a083bc840bbc16e45512542387453462851ae5bc3b9090",
+      "size": 3491552,
+      "license": "GPL-3.0-or-later",
+      "source": "https://github.com/tomoff1/quentin-store",
+      "redistribution": true,
+      "format": "elf"
+    },
+    {
+      "id": "quentin-store",
+      "title": "QUENTIN STORE",
+      "category": "Applications",
+      "description": "Catalogue de homebrews libres, telechargements HTTPS et SHA-256. Lancement manuel via ELF Loader.",
+      "version": "0.1.0",
+      "url": "https://github.com/tomoff1/quentin-store/releases/download/v0.1.0/quentin-store.elf",
+      "sha256": "d45b2aba918c526e59a4597326e8bbebed4aceaf02b239dd3e3f4074763b1f66",
+      "size": 18069120,
+      "license": "GPL-3.0-or-later",
+      "source": "https://github.com/tomoff1/quentin-store",
+      "redistribution": true,
+      "format": "elf"
+    }
+  ]
+}

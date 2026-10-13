@@ -1,0 +1,6 @@
+.deps/
+build/
+dist/
+*.part
+quentin-store-data/
+__pycache__/
