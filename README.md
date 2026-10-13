@@ -1,13 +1,13 @@
 # QUENTIN STORE
 
-Application homebrew PS5 native en C++ : catalogue libre, téléchargement HTTPS, reprise et SHA-256. Version **0.1.1 expérimentale**. Deux vrais exécutables ELF sont compilés : `quentin-store.elf` et `quentin-blocks.elf`.
+Application homebrew PS5 en C++ : catalogue libre, téléchargement HTTPS, reprise et SHA-256. Version **0.1.2 expérimentale** : ELF autonome et **lanceur PKG PS5 natif** (`PPSA99741`). Le lanceur contient le store et l'envoie au chargeur ELF local 9021 ; ce chargeur doit rester actif.
 
-**Statut honnête : compilation PS5 réussie sur Windows ; exécution PS5 13.60 non testée.** La publication distante et le run GitHub Actions sont suivis dans `docs/VALIDATION.md`. Le site désactive son bouton de téléchargement tant que la release publique n'existe pas.
+**Statut : compilation PS5 et tests PC réussis ; fonctionnement du PKG natif sur 13.60 à confirmer.** Les anciens PKG PS4 1.00/1.01 sont refusés sur la console de l'utilisateur. La publication distante et les validations sont suivies dans `docs/VALIDATION.md`.
 
 ## Démarrage sur PS5
 
-1. Telecharger uniquement [quentin-store.elf](https://github.com/tomoff1/quentin-store/releases/download/v0.1.1/quentin-store.elf).
-2. Envoyer ce fichier avec votre ELF Loader compatible, apres activation du jailbreak.
+1. Télécharger [QUENTIN-STORE-PS5.pkg](https://github.com/tomoff1/quentin-store/releases/download/v0.1.2/QUENTIN-STORE-PS5.pkg) et l'installer avec un installateur acceptant les PKG PS5.
+2. Activer le chargeur ELF 9021, puis ouvrir **QUENTIN STORE PS5**. Le lanceur transmet le store embarqué et se ferme. Le port 9021 n'est pas un installateur PKG.
 3. Le store initialise automatiquement ses donnees dans `/data/quentin-store/` : police et ressources sont integrees, aucun fichier annexe a copier par FTP.
 
 Le script optionnel `scripts/send-elf.ps1 -ConsoleIP ADRESSE_IP_PS5 -ElfPath CHEMIN_ELF` utilise le port 9021. Le loader doit etre actif. Voir [le guide PS5](docs/INSTALLATION-PS5.md).
@@ -28,7 +28,7 @@ Le catalogue initial contient Quentin Blocks. Les URL par defaut ciblent le cata
 
 ## Limites de la première version
 
-Le succès de compilation ne garantit pas vidéo, manette, réseau ou lancement sur votre environnement 13.60. Aucun PKG, eboot signé, image exFAT, intégration ShadowMountPlus ou installation automatique n'est généré. L'application est un payload ELF graphique, pas encore un titre enregistré dans le menu système PS5. Le rendu logiciel vise une navigation fluide, sans mesure de performance sur console. Les illustrations sont intégrées, pas des images distantes de tiers. Le catalogue initial contient uniquement les deux projets originaux dont les droits de redistribution sont définis ici.
+Le succès de compilation ne garantit pas vidéo, manette, réseau ou lancement sur votre environnement 13.60. Le PKG est un lanceur PS5 natif expérimental avec un `eboot.bin` FSELF et `param.json` ; le store graphique reste un payload ELF. Le chargeur local 9021 est nécessaire. Aucun port complet vers le contexte système, image exFAT ou installation automatique n'est fourni. Le rendu logiciel vise une navigation fluide, sans mesure de performance sur console. Les illustrations sont intégrées. Le catalogue contient des projets originaux dont les droits de redistribution sont définis ici.
 
 La police Outfit fournie avec sa licence OFL permet le rendu UTF-8 avec SDL_ttf ; une police bitmap sert de secours si le fichier de police manque. Les hashes proviennent du catalogue HTTPS de confiance, sans signature cryptographique indépendante du manifeste. Un serveur de catalogue compromis pourrait donc remplacer un fichier et son hash.
 
@@ -84,7 +84,7 @@ gh auth login --scopes workflow
 
 Cloudflare Pages : dépôt GitHub `tomoff1/quentin-store`, preset « None », commande de build vide, dossier de sortie `site`. GitHub sert les ELF via Releases, Cloudflare sert la présentation. Le catalogue et les mises à jour sont des fichiers JSON publics statiques, donc aucun VPS nécessaire.
 
-Livraison publique : [site](https://quentin-store.pages.dev/), [code source](https://github.com/tomoff1/quentin-store), [version téléchargeable](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.1). Cloudflare a été déployé par upload direct ; la connexion automatique au dépôt reste optionnelle. Pour redéployer : `./scripts/publish-cloudflare.ps1`.
+Livraison publique : [site](https://quentin-store.pages.dev/), [code source](https://github.com/tomoff1/quentin-store), [version téléchargeable](https://github.com/tomoff1/quentin-store/releases/tag/v0.1.2). Cloudflare a été déployé par upload direct ; la connexion automatique au dépôt reste optionnelle. Pour redéployer : `./scripts/publish-cloudflare.ps1`.
 
 ## Architecture et licences
 

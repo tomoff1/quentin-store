@@ -4,3 +4,5 @@ dist/
 *.part
 quentin-store-data/
 __pycache__/
+native-pkg/**/bin/
+native-pkg/**/obj/

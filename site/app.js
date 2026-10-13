@@ -9,6 +9,6 @@
     const asset=remote.assets.find(a=>a.browser_download_url===release.download);
     if(!asset)return;
     const button=document.querySelector('#download');button.href=asset.browser_download_url;
-    button.textContent='Télécharger v'+release.version;button.classList.remove('disabled');button.removeAttribute('aria-disabled');
+    button.textContent=release.format==='pkg-ps5'?'Télécharger le PKG PS5':'Télécharger v'+release.version;button.classList.remove('disabled');button.removeAttribute('aria-disabled');
   }catch{ /* La page reste lisible hors ligne; aucun faux lien actif. */ }
 })();

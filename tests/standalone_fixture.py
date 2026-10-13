@@ -11,9 +11,13 @@ with tempfile.TemporaryDirectory(prefix='qs-standalone-',dir=a.work) as tmp:
     config=json.loads((data/'config.json').read_text());assert config['catalog_url'].startswith('https://')
     assert json.loads((data/'catalog.json').read_text())['items']
     assert not (data/'font.ttf').exists(), 'Font must load directly from embedded memory'
+    assert 'Premiere image envoyee au moteur video' in (data/'startup.log').read_text()
     custom={'catalog_url':'','update_url':''};(data/'config.json').write_text(json.dumps(custom))
     history='[]';(data/'downloads/history.json').write_text(history)
     subprocess.run([str(binary),str(data)],env=env,check=True,timeout=45)
     assert json.loads((data/'config.json').read_text())==custom
     assert (data/'downloads/history.json').read_text()==history
-print('Standalone startup, embedded CA/catalog/font and existing settings verified.')
+    failed=subprocess.run([str(binary),str(data)],env=dict(env,SDL_VIDEODRIVER='qs-invalid-driver'),timeout=45)
+    assert failed.returncode==3, 'A video initialization failure must exit cleanly'
+    assert 'Echec SDL:' in (data/'startup.log').read_text(), 'Persist the failure for console diagnosis'
+print('Standalone assets, preserved settings, first-frame log and SDL failure diagnostics verified.')

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(QuentinStore VERSION 0.1.1 LANGUAGES CXX)
+project(QuentinStore VERSION 0.1.2 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 enable_testing()
 add_executable(core-tests tests/core_tests.cpp)

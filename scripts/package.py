@@ -1,6 +1,6 @@
 import argparse, hashlib, json, pathlib, shutil, zipfile
 ROOT=pathlib.Path(__file__).resolve().parents[1]
-VERSION='0.1.1'
+VERSION='0.1.2'
 def main():
     p=argparse.ArgumentParser();p.add_argument('--repository',help='proprietaire/quentin-store');a=p.parse_args()
     build=ROOT/'build/ps5';out=ROOT/'dist';out.mkdir(exist_ok=True)
@@ -19,9 +19,10 @@ def main():
     (out/'catalog.json').write_text(json.dumps(catalog,indent=2,ensure_ascii=False),encoding='utf-8')
     (out/'config.json').write_text(json.dumps({'catalog_url':('https://raw.githubusercontent.com/'+a.repository+'/main/site/catalog.json') if a.repository else '', 'update_url':('https://raw.githubusercontent.com/'+a.repository+'/main/site/update.json') if a.repository else ''},indent=2))
     if items:
-        (out/'update.json').write_text(json.dumps({'schema':1,'version':VERSION,'notes':'ELF autonome : police, certificats et catalogue integres. Execution PS5 a confirmer. Installation manuelle par ELF Loader.','asset':items[1]},indent=2))
+        (out/'update.json').write_text(json.dumps({'schema':1,'version':VERSION,'notes':'Diagnostics de demarrage, notifications et dossier de donnees PS5 fixe. Execution PS5 a confirmer. Installation manuelle par ELF Loader.','asset':items[1]},indent=2))
         for name in ['catalog.json','update.json']:shutil.copy2(out/name,ROOT/'site'/name)
-        (ROOT/'site/release.json').write_text(json.dumps({'version':VERSION,'download':base+'quentin-store.elf','source':source},indent=2))
+        pkg=(out/'QUENTIN-STORE-PS5.pkg').exists()
+        (ROOT/'site/release.json').write_text(json.dumps({'version':VERSION,'download':base+('QUENTIN-STORE-PS5.pkg' if pkg else 'quentin-store.elf'),'source':source,'format':'pkg-ps5' if pkg else 'elf'},indent=2)+'\n')
     else:
         print('Depot non configure: catalogue vide, aucune URL de telechargement inventee.')
     for f in ['ca-bundle.crt','font.ttf','LICENSE','README.md']:shutil.copy2(ROOT/f,out/f)
@@ -36,9 +37,9 @@ def main():
         z.write(ROOT/'scripts/send-elf.ps1','scripts/send-elf.ps1')
     source=out/('QUENTIN-STORE-'+VERSION+'-source.zip')
     with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED) as z:
-        for name in ['src','tests','scripts','site','docs','third_party','.github']:
+        for name in ['src','native-launcher','native-pkg','tests','scripts','site','docs','third_party','.github']:
             for f in (ROOT/name).rglob('*'):
-                if f.is_file() and '__pycache__' not in f.parts:z.write(f,'QUENTIN-STORE/'+f.relative_to(ROOT).as_posix())
+                if f.is_file() and not any(part in ('__pycache__','bin','obj') for part in f.parts):z.write(f,'QUENTIN-STORE/'+f.relative_to(ROOT).as_posix())
         for name in ['README.md','LICENSE','CMakeLists.txt','dependencies.lock.json','ca-bundle.crt','font.ttf','.gitignore']:z.write(ROOT/name,'QUENTIN-STORE/'+name)
         for f in relink.glob('*.o'):z.write(f,'QUENTIN-STORE/dist/relink/'+f.name)
         for f in out.glob('*.elf'):z.write(f,'QUENTIN-STORE/dist/'+f.name)

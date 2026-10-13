@@ -2,9 +2,21 @@
 
 Cette procédure vise un environnement déjà jailbreaké. QUENTIN STORE n'exploite pas la console. Le firmware 13.60 est une cible non validée pour ces ELF. Ne modifier ni firmware ni protections réseau pour tenter de résoudre un problème du store.
 
+## PKG PS5 natif — version de test
+
+Télécharger [QUENTIN-STORE-PS5.pkg](https://github.com/tomoff1/quentin-store/releases/download/v0.1.2/QUENTIN-STORE-PS5.pkg). Il contient un lanceur PS5 (`PPSA99741`, version `01.000.000`) et le store ELF 0.1.2 embarqué. Le lanceur transmet ce store au chargeur local sur le port 9021 ; il requiert donc ce chargeur actif, puis se ferme pour laisser la vidéo au store. Le PKG ne constitue pas encore un port autonome du store vers le contexte d'une application système.
+
+1. Activer l'environnement jailbreak et le chargeur ELF 9021 déjà utilisés sur la console.
+2. Installer **ce PKG PS5** avec l'installateur de la console/ps5upload s'il accepte ce format. Le port 9021 sert à transmettre les ELF, pas à installer un PKG.
+3. Ouvrir **QUENTIN STORE PS5** depuis le menu. C'est une nouvelle application ; les anciennes tuiles **QUENTIN STORE Launcher** PS4 ne sont pas cette version.
+
+Une notification « lanceur natif execute » indique que l'exécutable PS5 a réellement commencé. « ELF transmis » confirme seulement le transfert. Le store affiche ensuite sa propre notification « Demarrage du store 0.1.2 », puis une notification à sa première image. Si le chargeur est inaccessible ou l'ELF illisible, le lanceur affiche une page d'erreur.
+
+L'installation et l'exécution de ce PKG natif sur 13.60 restent à tester. Les anciens PKG PS4 1.00 et 1.01 ont été **refusés par la console de l'utilisateur** avec « Ce jeu PS4 n'est pas jouable sur PS5 » ; ils ne sont plus recommandés. La compilation, le format natif et les essais PC ne prouvent pas l'acceptation par la console.
+
 ## Un seul fichier a envoyer
 
-Telecharger uniquement `quentin-store.elf` depuis la release v0.1.1. La police, les certificats HTTPS et un catalogue initial sont integres. Aucun transfert FTP de fichiers annexes n'est necessaire.
+Telecharger uniquement `quentin-store.elf` depuis la release v0.1.2. La police, les certificats HTTPS et un catalogue initial sont integres. Aucun transfert FTP de fichiers annexes n'est necessaire.
 
 Au premier lancement, le store cree automatiquement `/data/quentin-store/`, sa configuration, ses certificats et son catalogue. Les parametres et l'historique existants sont conserves. Internet permet d'actualiser le catalogue. Le SHA-256 est disponible dans `SHA256SUMS` sur la release.
 
@@ -22,7 +34,7 @@ Le script transmet l'ELF, puis ferme le socket. Son message de succès confirme 
 
 Le script détecte l'ELF à la racine de la distribution, dans `dist/` du projet source ou dans `build/ps5/` après compilation. Pour choisir un autre ELF, ajouter `-ElfPath CHEMIN_COMPLET`.
 
-**ShadowMountPlus** : aucun titre enregistrable n'est fourni dans cette version. Copier ce payload dans `/data/homebrew/` ne le transforme pas en application du menu PS5. La production d'un titre `eboot.bin`/exFAT requiert une autre chaîne et un test spécifique ; ne pas lui appliquer les étapes d'installation Overdrive.
+**ShadowMountPlus** : copier le seul payload ELF dans `/data/homebrew/` ne le transforme pas en application du menu. Le PKG PS5 décrit ci-dessus utilise une chaîne distincte avec un véritable exécutable natif ; aucune image exFAT n'est livrée.
 
 ## Commandes
 
@@ -56,4 +68,4 @@ Paramètres → Vérifier les mises à jour. Les nouveautés apparaissent ; L2 t
 5. Annuler un téléchargement ; tenter la reprise et vérifier l'historique.
 6. Vérifier une mise à jour, lire les nouveautés et effectuer le remplacement manuel.
 
-Si l'écran reste noir : récupérer `/data/quentin-store/diagnostic.log` s'il existe, les logs du loader, sa version et celle du jailbreak. Ne conclure à la compatibilité 13.60 qu'après ces essais. Le diagnostic local enregistre la dernière erreur, pas vos identifiants ni une collecte réseau.
+Si l'écran reste noir : noter les notifications reçues et récupérer `/data/quentin-store/startup.log`, `/data/quentin-store/diagnostic.log` s'ils existent, ainsi que les logs du loader. `startup.log` indique la dernière étape atteinte avant l'affichage. Ne conclure à la compatibilité 13.60 qu'après ces essais. Le diagnostic local ne collecte pas vos identifiants et ne transmet rien sur le réseau.

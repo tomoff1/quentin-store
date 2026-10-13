@@ -13,7 +13,13 @@ Sources primaires consultées avant choix du SDK. Les déclarations des projets 
 | [ShadowMountPlus](https://github.com/drakmor/ShadowMountPlus) | Examiné pour la distribution ; non intégré | GPL-3.0 | Auto-monteur d'images et titres, dépendant d'un environnement kstuff ; aucun emballage de titre fourni ici |
 | [Overdrive releases](https://github.com/half144/overdrive-releases) | Référence d'ergonomie uniquement | Aucun code ou asset repris | Le mainteneur annonce essais 13.60 pour son propre programme. Cela ne certifie pas QUENTIN STORE |
 
-La voie ELF est retenue car le SDK public fournit une chaîne documentée qui a effectivement compilé ici. Un titre de menu PS5 demanderait de valider le linker, la signature homebrew, les métadonnées, l'image et ShadowMountPlus ; ces éléments ne sont pas simulés.
+La voie ELF est utilisée pour le store. La version 0.1.2 ajoute un lanceur natif avec une chaîne séparée ; les validations de compilation et de format ne prouvent pas sa compatibilité console.
+
+## Chaîne du lanceur PS5 natif
+
+[ps5-native-app-boilerplate](https://github.com/blackbearreloaded/ps5-native-app-boilerplate), commit `b8dc4a3fe2e05e826b037bd68824751c7468a6d7`, fournit le CRT d'application, le convertisseur ELF PS5/FSELF et le runtime `libc.prx` écrit à partir de sources publiques. Licence GPL-3.0-or-later ; sources et notices fournies avec le projet. Le runtime reconstruit est identique à celui identifié par l'amont. L'amont annonce des essais 6.02 et 12.70, ce qui ne certifie pas 13.60 ni QUENTIN STORE.
+
+[LibProsperoPKG](https://github.com/SvenGDK/LibProsperoPKG), commit `748eabf1b7d17819528cabf367d8e27109d8fce3`, est le constructeur public de PKG PS5 debug (GPL-3.0-or-later). La version locale retire l'injection automatique d'un module `right.sprx` embarqué dont la provenance n'est pas établie. Ce module n'est pas repris dans notre PKG. L'absence de ce module et la validation hors console ne constituent pas une preuve d'acceptation par le firmware. Aucun module Sony déchiffré n'est nécessaire à la compilation du lanceur.
 
 ## Bibliothèques liées et obligations
 

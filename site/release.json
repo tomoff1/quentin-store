@@ -1,5 +1,6 @@
 {
-  "version": "0.1.1",
-  "download": "https://github.com/tomoff1/quentin-store/releases/download/v0.1.1/quentin-store.elf",
-  "source": "https://github.com/tomoff1/quentin-store"
+  "version": "0.1.2",
+  "download": "https://github.com/tomoff1/quentin-store/releases/download/v0.1.2/QUENTIN-STORE-PS5.pkg",
+  "source": "https://github.com/tomoff1/quentin-store",
+  "format": "pkg-ps5"
 }

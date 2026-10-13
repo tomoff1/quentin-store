@@ -5,6 +5,7 @@
 #include "drawing.hpp"
 #include "network.hpp"
 #include "embedded_assets.hpp"
+#include "startup.hpp"
 #include <curl/curl.h>
 #include <thread>
 #include <cmath>
@@ -50,24 +51,31 @@ int main(int argc,char** argv) {
     std::string root="/data/quentin-store";
 #else
     std::string root="quentin-store-data";
-#endif
     if(argc>1)root=argv[1];
+#endif
+    StartupLog boot(root);
+    startup_notice("Demarrage du store 0.1.2");
     Progress progress; std::thread worker; std::mutex resultMutex; std::string pendingCatalog,pendingUpdate;
     std::string catalogUrl="https://raw.githubusercontent.com/tomoff1/quentin-store/main/site/catalog.json",updateUrl="https://raw.githubusercontent.com/tomoff1/quentin-store/main/site/update.json",ca=root+"/ca-bundle.crt",last="Catalogue local",query,category="Tous";
     std::vector<Item> items; Json history=Json::array();
     try {
         directory(root); directory(root+"/downloads");
+        boot.record("Dossier de donnees accessible");
         write_text(ca,std::string(reinterpret_cast<const char*>(embedded::ca),sizeof embedded::ca));
         items=parse_catalog(std::string(reinterpret_cast<const char*>(embedded::catalog),sizeof embedded::catalog));
         try { auto config=Json::parse(read_text(root+"/config.json")); catalogUrl=config.value("catalog_url",""); updateUrl=config.value("update_url",""); }catch(...){write_text(root+"/config.json",Json{{"catalog_url",catalogUrl},{"update_url",updateUrl}}.dump(2));}
         try { items=parse_catalog(read_text(root+"/catalog.json")); }catch(...){write_text(root+"/catalog.json",std::string(reinterpret_cast<const char*>(embedded::catalog),sizeof embedded::catalog));}
         try { history=Json::parse(read_text(root+"/downloads/history.json")); if(!history.is_array())history=Json::array(); }catch(...){}
-    }catch(const std::exception& e) { std::fprintf(stderr,"%s\n",e.what()); return 1; }
-    if(curl_global_init(CURL_GLOBAL_DEFAULT)!=CURLE_OK)return 2;
-    SDL_SetMainReady(); if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_EVENTS)) { write_text(root+"/diagnostic.log",SDL_GetError()); curl_global_cleanup(); return 3; }
+    }catch(const std::exception& e) { boot.record(std::string("Echec fichiers: ")+e.what(),true); return 1; }
+    boot.record("Ressources embarquees et configuration chargees");
+    if(curl_global_init(CURL_GLOBAL_DEFAULT)!=CURLE_OK){boot.record("Echec initialisation HTTPS",true);return 2;}
+    boot.record("Initialisation video et manette");
+    SDL_SetMainReady(); if(SDL_Init(SDL_INIT_VIDEO|SDL_INIT_JOYSTICK|SDL_INIT_EVENTS)) { boot.record(std::string("Echec SDL: ")+SDL_GetError(),true); curl_global_cleanup(); return 3; }
+    boot.record("SDL initialise");
     SDL_Window* window=SDL_CreateWindow("QUENTIN STORE",SDL_WINDOWPOS_CENTERED,SDL_WINDOWPOS_CENTERED,1280,720,SDL_WINDOW_SHOWN);
     if(window)renderer=SDL_CreateRenderer(window,-1,SDL_RENDERER_SOFTWARE);
-    if(!renderer){write_text(root+"/diagnostic.log",SDL_GetError()); SDL_Quit(); curl_global_cleanup(); return 4;}
+    if(!renderer){boot.record(std::string("Echec affichage: ")+SDL_GetError(),true); SDL_Quit(); curl_global_cleanup(); return 4;}
+    boot.record("Fenetre et moteur de rendu crees");
     SDL_RenderSetLogicalSize(renderer,1280,720);
     if(TTF_Init()==0){int sizes[]={13,20,32};for(int i=0;i<3;i++){fonts[i]=TTF_OpenFontRW(SDL_RWFromConstMem(embedded::font,int(sizeof embedded::font)),1,sizes[i]);if(fonts[i])TTF_SetFontStyle(fonts[i],TTF_STYLE_BOLD);}}
     std::map<int,SDL_Joystick*> pads;
@@ -159,6 +167,7 @@ int main(int argc,char** argv) {
         text(280,650,(error.empty()?msg:"Erreur: "+error).substr(0,108),error.empty()?0xc7d6efff:0xff938aff,1);
         text(280,683,"L1/R1: onglets | X: ouvrir | Carre: categorie | Triangle: actualiser | Options: quitter",0x91a5c2ff,1);
         SDL_RenderPresent(renderer);SDL_Delay(16);frames++;
+        if(frames==1)boot.record("Premiere image envoyee au moteur video",true);
         if(std::getenv("QS_CAPTURE") && frames==30){SDL_Surface* s=SDL_CreateRGBSurfaceWithFormat(0,1280,720,32,SDL_PIXELFORMAT_ARGB8888);if(s){SDL_RenderReadPixels(renderer,nullptr,s->format->format,s->pixels,s->pitch);SDL_SaveBMP(s,std::getenv("QS_CAPTURE"));SDL_FreeSurface(s);}running=false;}
     }
     progress.cancel=true; if(worker.joinable())worker.join();for(auto& p:pads)SDL_JoystickClose(p.second);
