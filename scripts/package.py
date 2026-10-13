@@ -33,6 +33,7 @@ def main():
         for file in (ROOT/'third_party').glob('*.txt'):z.write(file,'third_party/'+file.name)
         for file in (ROOT/'third_party').glob('*.LICENSE'):z.write(file,'third_party/'+file.name)
         for file in (ROOT/'docs').glob('*.md'):z.write(file,'docs/'+file.name)
+        z.write(ROOT/'scripts/send-elf.ps1','scripts/send-elf.ps1')
     source=out/('QUENTIN-STORE-'+VERSION+'-source.zip')
     with zipfile.ZipFile(source,'w',zipfile.ZIP_DEFLATED) as z:
         for name in ['src','tests','scripts','site','docs','third_party','.github']:
@@ -40,6 +41,7 @@ def main():
                 if f.is_file() and '__pycache__' not in f.parts:z.write(f,'QUENTIN-STORE/'+f.relative_to(ROOT).as_posix())
         for name in ['README.md','LICENSE','CMakeLists.txt','dependencies.lock.json','ca-bundle.crt','font.ttf','.gitignore']:z.write(ROOT/name,'QUENTIN-STORE/'+name)
         for f in relink.glob('*.o'):z.write(f,'QUENTIN-STORE/dist/relink/'+f.name)
+        for f in out.glob('*.elf'):z.write(f,'QUENTIN-STORE/dist/'+f.name)
     checks={f.name:hashlib.sha256(f.read_bytes()).hexdigest() for f in out.iterdir() if f.is_file() and f.suffix in ['.elf','.zip']}
     (out/'SHA256SUMS').write_text('\n'.join(h+'  '+n for n,h in checks.items())+'\n')
     print(target)

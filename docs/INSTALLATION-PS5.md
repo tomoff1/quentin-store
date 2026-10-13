@@ -24,13 +24,15 @@ Ne pas copier les ports SDK sur la console : SDL, curl et OpenSSL sont liés sta
 
 Conserver votre ELF Loader déjà compatible avec votre jailbreak. Le chargeur ps5-payload-dev/elfldr documente le port TCP 9021 ; la seule présence de ce port ne garantit pas les privilèges et modules nécessaires pour SDL sur 13.60.
 
-Depuis le dossier source sur PC :
+Depuis le dossier de distribution décompressé sur PC (le script est inclus) :
 
 ```powershell
-./scripts/send-elf.ps1 -ConsoleIP ADRESSE_IP_PS5 -Port 9021 -ElfPath ./dist/quentin-store.elf
+./scripts/send-elf.ps1 -ConsoleIP ADRESSE_IP_PS5 -Port 9021
 ```
 
 Le script transmet l'ELF, puis ferme le socket. Son message de succès confirme l'envoi, pas le lancement. Si votre chargeur prend en charge `file:`, vous pouvez lui envoyer `file:/data/quentin-store/quentin-store.elf` suivi d'un saut de ligne. Utiliser le protocole exact de votre loader.
+
+Le script détecte l'ELF à la racine de la distribution, dans `dist/` du projet source ou dans `build/ps5/` après compilation. Pour choisir un autre ELF, ajouter `-ElfPath CHEMIN_COMPLET`.
 
 **ShadowMountPlus** : aucun titre enregistrable n'est fourni dans cette version. Copier ce payload dans `/data/homebrew/` ne le transforme pas en application du menu PS5. La production d'un titre `eboot.bin`/exFAT requiert une autre chaîne et un test spécifique ; ne pas lui appliquer les étapes d'installation Overdrive.
 

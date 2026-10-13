@@ -20,6 +20,7 @@ Réalisée sur Windows 11 le 13 octobre 2026.
 | Interface réelle sur PC | Exécution SDL, capture incluse dans site/screenshot.png |
 | Scripts Python | Compilation syntaxique réussie ; relink des objets fourni testé, ELF identique |
 | Scripts PowerShell | Analyse syntaxique réussie |
+| Script de transfert livré dans l'archive | Archive extraite, script PowerShell exécuté contre un serveur TCP local : 18 069 120 octets identiques reçus ; aucune PS5 contactée |
 | PS5 physique firmware 13.60 | **Non testée** |
 | GitHub Actions | Tests et compilation PS5 réussis sur Ubuntu 24.04 ; [run vérifié](https://github.com/tomoff1/quentin-store/actions/runs/38352197453) |
 | Catalogue public et GitHub Releases | Chargement HTTPS et téléchargement de Quentin Blocks vérifiés avec le moteur C++ réel, SHA-256 correct |
