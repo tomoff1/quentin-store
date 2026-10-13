@@ -7,3 +7,6 @@ Install via the existing compatible PKG installer. Keep etaHEN and its ELF loade
 GPL-3.0-or-later. Launcher sources are in launcher/main.c and scripts/build_pkg_launcher.py. Store source: https://github.com/tomoff1/quentin-store/releases/tag/v0.1.1
 OpenOrbis toolchain v0.5.4: https://github.com/OpenOrbis/OpenOrbis-PS4-Toolchain/releases/tag/v0.5.4
 LibOrbisPkg: https://github.com/maxton/LibOrbisPkg (LGPL-3.0).
+
+## 1.01 compatibility experiment
+The PS5 rejects launcher 1.00 before executing it while another PS4 PKG runs in the same jailbreak session. APP_TYPE is changed from 1 to 0, following the value in the public LightningMods PS4 Homebrew Store release 4.5 param.sfo. APP_VER and VERSION are now 01.01. The other classification fields and title ID are unchanged. This isolates a metadata hypothesis; PS5 acceptance and store startup remain unconfirmed.
